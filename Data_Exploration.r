@@ -53,6 +53,7 @@ cor(state$CO2,state$Hydro)
 cor(state$CO2,state$Geo..thermal)
 cor(state$CO2,state$Solar)
 
+#attempted for loops that 
 emmissions = c(state$CO2, state$CH4,state$N2O, state$CO2e,state$Annual.NOx, state$Ozone.Season.NOx,state$SO2)
 energy = c(state$Coal, state$Oil, state$Gas, state$Gas, state$Other.Fossil, state$Nuclear,state$Hydro, state$Biomass, state$Wind, state$Solar, state$Geo..thermal, state$Other.unknown..purchased.fuel)
 for(i in emmissions){
@@ -75,6 +76,7 @@ par(mfrow=c(2,2))
 model=lm(CO2~Coal, data=state) 
 plot(model)
 plot(state$CO2, state$Coal)
+
 #covariance,histograms, and means
 cov(state$CO2, state$Coal)
 hist(state$CO2)
