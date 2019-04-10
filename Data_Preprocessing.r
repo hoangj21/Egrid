@@ -46,21 +46,4 @@ state$Ozone.Season.NOx <- as.numeric(state$Ozone.Season.NOx)
 state$SO2 <- as.numeric(state$SO2)
 state$State.Income <- as.numeric(state$State.Income)
 state$Nameplate.Capacity..MW. <- as.numeric(state$Nameplate.Capacity..MW.)
-#state$Net.Generation..MWh. <- as.numeric(state$Net.Generation..MWh.)
-##attempted for loops that don't work
-# emmissions = c(state$CO2, state$CH4,state$N2O, state$CO2e,state$Annual.NOx, state$Ozone.Season.NOx,state$SO2)
-# energy = c(state$Coal, state$Oil, state$Gas, state$Gas, state$Other.Fossil, state$Nuclear,state$Hydro, state$Biomass, state$Wind, state$Solar, state$Geo..thermal, state$Other.unknown..purchased.fuel)
-# for(i in emmissions){
-#   for(j in energy){
-#     cor(i,j)
-#   }
-#   
-# }
-# for(i in 1:length(emmissions)){
-#   for(j in 1:length(energy)){
-#     print(energy[j])
-#   }
-#   print(emmissions[i])
-# }
-
-
+state$Net.Generation..MWh. <- as.numeric(state$Net.Generation..MWh.)

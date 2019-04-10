@@ -1,0 +1,76 @@
+source("Data_Preprocessing.r")
+#This file was just some data exploration and experimentation with liner models
+
+
+#viewing correlations between various variables
+plot(state)
+cor(state$CO2,state$Oil)
+cor(state$CO2,state$Coal)
+cor(state$CO2,state$Gas)
+cor(state$CO2,state$Other.Fossil)
+cor(state$CO2,state$Nuclear)
+cor(state$CO2,state$Biomass)
+cor(state$CO2,state$Hydro)
+cor(state$CO2,state$Geo..thermal)
+cor(state$CO2,state$Solar)
+
+par(mfrow=c(2,2))
+CoalvCO2.lm=lm(CO2~Coal, data = state) 
+plot(model)
+plot(state$Coal, state$CO2)
+abline(CoalvCO2.lm)
+CoalvCH4.lm=lm(CH4~Coal,data = state)
+plot(state$Coal,state$CH4)
+abline(CoalvCH4.lm)
+CoalvN2O.lm=lm(N2O~Coal,data = state)
+plot(state$Coal,state$N2O)
+abline(CoalvN2O.lm)
+CoalvCO2e.lm=lm(CO2e~Coal,data = state)
+plot(state$Coal,state$CO2e)
+abline(CoalvCO2e.lm)
+CoalvANOx.lm=lm(Annual.NOx~Coal,data = state)
+plot(state$Coal,state$Annual.NOx)
+abline(CoalvANOx.lm)
+CoalvOZNOx.lm=lm(Ozone.Season.NOx~Coal,data = state)
+plot(state$Coal,state$Ozone.Season.NOx)
+abline(CoalvOZNOx.lm)
+CoalvSO2.lm=lm(SO2~Coal,data = state)
+plot(state$Coal,state$SO2)
+abline(CoalvSO2.lm)
+
+plot(state$CO2, state$Gas)
+plot(state$CO2, state$Oil)
+plot(log(state$CO2), log(state$Oil))
+plot(state$CO2, log(state$Gas))
+plot(state$CO2, state$Other.Fossil)
+plot(state$CO2, state$Nuclear)
+plot(state$CO2, state$Hydro)
+plot(state$CO2, state$Biomass)
+plot(state$CO2,state$Wind)
+plot(state$CO2,state$Solar)
+plot(state$CO2,state$Geo..thermal)
+plot(state$CO2,state$Other.unknown..purchased.fuel)
+
+newData = cbind(state$CO2,state$Coal)
+set.seed(20)
+km.out=kmeans(newData,3,nstart=20)
+km.out
+km.clusters=km.out$cluster
+table(km.clusters,iris$Species)
+plot(graphData$Species, col=(km.out$cluster+1), xlab="Petal.Length", ylab = "Petal.Width")
+plot(newData, col=(km.out$cluster+1), xlab="Petal.Length", ylab = "Petal.Width")
+print(state$State.Income)
+plot(state$State.Income,state$CO2)
+plot(state$Nameplate.Capacity..MW., state$Net.Generation..MWh.)
+plot(state$CO2,state$State)
+print(state$State)
+
+#covariance,histograms, and means
+cov(state$CO2, state$Coal)
+hist(state$CO2)
+hist(state$Coal)
+mean(state$CO2)
+mean(state$Coal)
+
+
+
