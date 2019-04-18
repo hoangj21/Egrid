@@ -47,6 +47,7 @@ m<-leaflet(data = mapStates) %>% addTiles() %>%
 # From http://leafletjs.com/examples/choropleth/us-states.js
 states <- geojsonio::geojson_read(x = "https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json", what = "sp")
 
+print(states$name)
 bins <- c(0, 250, 500, 750, 1000, 1250, 1500, 1750,2000,Inf)
 pal <- colorBin("Reds", domain = state$CO2, bins = bins)
 
