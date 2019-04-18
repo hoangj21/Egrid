@@ -34,6 +34,7 @@ server <- function(input, output) {
      x = input$xcol
      y = input$ycol
      
+     
      #Array of emmissions data
      emmissions = cbind(state$CO2, state$CH4,state$N2O, state$CO2e,state$Annual.NOx, state$Ozone.Season.NOx,state$SO2)
      #Array for Energy source data
@@ -45,21 +46,8 @@ server <- function(input, output) {
      
      xIndex = match(x,energy.lab)
      yIndex = match(y,emmissions.lab)
-     print(xIndex)
-     #lengths if emmissions/energy arrays
-     emmissionsLen <-7
-     energyLen <- 11 
      
-     #Scatterplots and linear models for all pairs of energy sources and emmissions
-     # for(i in 1:energyLen){
-     #   for(j in 1:emmissionsLen){
-     #     plot(energy[,i],emmissions[,j],xlab=energy.lab[i], ylab=emmissions.lab[j])
-     #     model=lm(emmissions[,j]~energy[,i]) 
-     #     abline(model)
-     #   }
-     # }
-     
-     plot(energy[,xIndex],emmissions[,yIndex],xlab=x, ylab=y)
+     plot(energy[,xIndex],emmissions[,yIndex],xlab=x, ylab=y,  col = "blue", pch = 15)
      model=lm(emmissions[,yIndex]~energy[,xIndex]) 
      abline(model)
    })
