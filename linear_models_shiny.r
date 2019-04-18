@@ -51,13 +51,17 @@ server <- function(input, output) {
      energyLen <- 11 
      
      #Scatterplots and linear models for all pairs of energy sources and emmissions
-     for(i in 1:energyLen){
-       for(j in 1:emmissionsLen){
-         plot(energy[,i],emmissions[,j],xlab=energy.lab[i], ylab=emmissions.lab[j])
-         model=lm(emmissions[,j]~energy[,i]) 
-         abline(model)
-       }
-     }
+     # for(i in 1:energyLen){
+     #   for(j in 1:emmissionsLen){
+     #     plot(energy[,i],emmissions[,j],xlab=energy.lab[i], ylab=emmissions.lab[j])
+     #     model=lm(emmissions[,j]~energy[,i]) 
+     #     abline(model)
+     #   }
+     # }
+     
+     plot(energy[,xIndex],emmissions[,yIndex],xlab=x, ylab=y)
+     model=lm(emmissions[,yIndex]~energy[,xIndex]) 
+     abline(model)
    })
 }
 
