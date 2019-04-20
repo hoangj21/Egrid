@@ -20,14 +20,21 @@ ui <- fluidPage(
     
     #selection menus for linear graphs
     sidebarPanel(
+      paste("Single variable Regression"),
       selectInput('xcol', 'Energy Resource', list("Coal", "Oil", "Gas", "Other.Fossil", "Nuclear", "Hydro", "Biomass", "Wind","Solar","Geothermal","Unknown"), "Coal"),
-      selectInput('ycol', 'Emissions (lb/MWh)', list("CO2","CH4", "N2O", "CO2e","Annual.NOx","Ozone.Season.NOx","SO2"),"CO2")
+      selectInput('ycol', 'Emissions (lb/MWh)', list("CO2","CH4", "N2O", "CO2e","Annual.NOx","Ozone.Season.NOx","SO2"),"CO2"),
+      paste("Multivariable Regression"),
+      selectInput('xcol2', 'Energy Resource', list("Coal", "Oil", "Gas", "Other.Fossil", "Nuclear", "Hydro", "Biomass", "Wind","Solar","Geothermal","Unknown"), "Coal"),
+      width = 2
     ),
     
     mainPanel(
       fluidRow(
-        column(10, plotOutput('linearModel')),
-        column(10,  leafletOutput("mymap"))
+        splitLayout(cellWidths = c("50%", "50%"),
+                    column(10, plotOutput('linearModel')),
+                    column(10,  plotOutput("multlinear"))
+        ),
+        column(10,  paste("CO2 Emmissions Accross the Nation"), leafletOutput("mymap"))
       )
       
     )
@@ -62,7 +69,25 @@ server <- function(input, output) {
      plot(energy[,xIndex],emmissions[,yIndex],xlab=x, ylab=y,  col = "red", pch = 15)
      model=lm(emmissions[,yIndex]~energy[,xIndex]) 
      abline(model)
+     title(paste("Single Variable Regression"))
+   })
+   
+   output$multlinear <- renderPlot({
+     x = input$xcol2
      
+     emmissions = cbind(state$CO2, state$CH4,state$N2O, state$CO2e,state$Annual.NOx, state$Ozone.Season.NOx,state$SO2)
+     #Array for Energy source data
+     energy = cbind(state$Coal, state$Oil, state$Gas, state$Other.Fossil, state$Nuclear,state$Hydro, state$Biomass, state$Wind, state$Solar, state$Geo..thermal, state$Other.unknown..purchased.fuel)
+     #Labels for emmissions
+     emmissions.lab = c("CO2","CH4", "N2O", "CO2e","Annual.NOx","Ozone.Season.NOx","SO2")
+     #Labels for energy sources
+     energy.lab = c("Coal", "Oil", "Gas", "Other.Fossil", "Nuclear", "Hydro", "Biomass", "Wind","Solar","Geothermal","Unknown")
+     xIndex = match(x,energy.lab)
+     
+     plot(energy[,xIndex],emmissions[,1]+emmissions[,2]+emmissions[,3],xlab=x, ylab="CO2, CH4, N2O", col = "red", pch = 15)
+     model=lm(emmissions[,1]~energy[,1]+energy[,2]+energy[,3]) 
+     abline(model)
+     title(paste("Multivariable Regression"))
    })
    
    output$mymap <- renderLeaflet({
@@ -75,7 +100,7 @@ server <- function(input, output) {
      bins <- c(0, 250, 500, 750, 1000, 1250, 1500, 1750,2000,Inf)
      
      #Set color palette 
-     pal <- colorBin(Yl, domain = state$CO2, bins = bins)
+     pal <- colorBin("Reds", domain = state$CO2, bins = bins)
      
      #state and emissions labels
      labels <- sprintf(
@@ -109,7 +134,8 @@ server <- function(input, output) {
            direction = "auto")) %>%
        addLegend(pal = pal, values = ~density, opacity = 0.7, title = NULL,
                  position = "bottomright")
-   })
+     })
+   
 }
 
 # Run the application 
