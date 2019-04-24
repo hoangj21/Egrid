@@ -25,6 +25,7 @@ ui <- fluidPage(
       selectInput('ycol', 'Emissions (lb/MWh)', list("CO2","CH4", "N2O", "CO2e","Annual.NOx","Ozone.Season.NOx","SO2"),"CO2"),
       paste("Multivariable Regression"),
       selectInput('xcol2', 'Energy Resource', list("Coal", "Oil", "Gas", "Other.Fossil", "Nuclear", "Hydro", "Biomass", "Wind","Solar","Geothermal","Unknown"), "Coal"),
+      #selectInput('ycol3', 'Emissions (lb/MWh) For Histogram', list("CO2","CH4", "N2O", "CO2e","Annual.NOx","Ozone.Season.NOx","SO2"),"CO2"),
       width = 2
     ),
     
@@ -34,7 +35,9 @@ ui <- fluidPage(
                     column(10, plotOutput('linearModel')),
                     column(10,  plotOutput("multlinear"))
         ),
+        column (10, plotOutput("barModel")),
         column(10,  paste("CO2 Emmissions Accross the Nation"), leafletOutput("mymap"))
+        
       )
       
     )
@@ -135,6 +138,19 @@ server <- function(input, output) {
        addLegend(pal = pal, values = ~density, opacity = 0.7, title = NULL,
                  position = "bottomright")
      })
+   
+   output$barModel <- renderPlot({
+     #bargraph model for coal vs states to help with showcaseing the chorpleth graph
+     library(ggplot2)
+     #frame the states names and the col number
+     stateframe <- data.frame(State = state$State, Coal = state$Coal)
+     #plot the state names andcol numebrs into bar graph
+     plot <- ggplot(stateframe, aes(State, Coal))
+     plot +geom_bar(stat = "identity", width=1, color = "black") + theme_bw() +
+       theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
+     
+     
+   })
    
 }
 
