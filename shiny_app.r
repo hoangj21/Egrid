@@ -25,7 +25,8 @@ ui <- fluidPage(
       selectInput('ycol', 'Emissions (lb/MWh)', list("CO2","CH4", "N2O", "CO2e","Annual.NOx","Ozone.Season.NOx","SO2"),"CO2"),
       paste("Multivariable Regression"),
       selectInput('xcol2', 'Energy Resource', list("Coal", "Oil", "Gas", "Other.Fossil", "Nuclear", "Hydro", "Biomass", "Wind","Solar","Geothermal","Unknown"), "Coal"),
-      #selectInput('ycol3', 'Emissions (lb/MWh) For Histogram', list("CO2","CH4", "N2O", "CO2e","Annual.NOx","Ozone.Season.NOx","SO2"),"CO2"),
+      paste("Barchart"),
+      selectInput('ycol3', 'Energy Resource', list("Coal", "Oil", "Gas", "Other.Fossil", "Nuclear", "Hydro", "Biomass", "Wind","Solar","Geothermal","Unknown"), "Coal"),
       width = 2
     ),
     
@@ -140,14 +141,19 @@ server <- function(input, output) {
      })
    
    output$barModel <- renderPlot({
-     #bargraph model for coal vs states to help with showcaseing the chorpleth graph
+     
+     energy = cbind(state$Coal, state$Oil, state$Gas, state$Other.Fossil, state$Nuclear,state$Hydro, state$Biomass, state$Wind, state$Solar, state$Geo..thermal, state$Other.unknown..purchased.fuel)
+     energy.lab = c("Coal", "Oil", "Gas", "Other.Fossil", "Nuclear", "Hydro", "Biomass", "Wind","Solar","Geothermal","Unknown")
+     y = input$ycol3 
+     yIndex = match(y,energy.lab)
+     #bargraph model for coal vs states to help with showcasing the choropleth graph
      library(ggplot2)
      #frame the states names and the col number
-     stateframe <- data.frame(State = state$State, Coal = state$Coal)
+     stateframe <- data.frame(State = state$State, Resource = energy[,yIndex])
      #plot the state names andcol numebrs into bar graph
-     plot <- ggplot(stateframe, aes(State, Coal))
-     plot +geom_bar(stat = "identity", width=1, color = "black") + theme_bw() +
-       theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
+     plot <- ggplot(stateframe, aes(State, Resource))
+     plot +geom_bar(stat = "identity", width=1, color = "black", fill = "#ea6c62") + theme_bw() +
+       theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5)) +ggtitle("Energy Resource Percentage by State")+ylab(y)
      
      
    })
