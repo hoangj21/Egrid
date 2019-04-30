@@ -91,7 +91,7 @@ server <- function(input, output) {
      plot(energy[,xIndex],emmissions[,1]+emmissions[,2]+emmissions[,3],xlab=x, ylab="CO2, CH4, N2O", col = "red", pch = 15)
      model=lm(emmissions[,1]~energy[,1]+energy[,2]+energy[,3]) 
      abline(model)
-     title(paste("Multivariable Regression"))
+     title(paste("Multiple Metric Regression"))
    })
    
    output$mymap <- renderLeaflet({
